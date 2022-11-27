@@ -16,34 +16,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-//Update Products
-
-router.put("/:id", async (req, res) => {
-  try {
-    const updateProduct = await Product.findByIdAndUpdate(
-      req.body.id,
-      {
-        $set: req.body,
-      },
-      { new: true }
-    );
-    res.status(200).json(updateProduct);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-//Delete Products
-
-router.delete("/id", async (req, res) => {
-  try {
-    await Product.findByIdAndDelete(req.body.id);
-    res.status(200).json("Product has been deleted!");
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 //Get Products
 
 router.get("/find/:id", async (req, res) => {
@@ -79,6 +51,35 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
+  }
+});
+
+//Update Products
+
+router.put("/:id", async (req, res) => {
+  try {
+    const updateProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    console.log(req.params.id);
+    res.status(200).json(updateProduct);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//Delete Products
+
+router.delete("/id", async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.body.id);
+    res.status(200).json("Product has been deleted!");
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const OrderSchema = new mongoose.Schema(
+const SummarySchema = new mongoose.Schema(
   {
     userId: { type: String, requird: true },
     products: [
@@ -10,10 +10,8 @@ const OrderSchema = new mongoose.Schema(
       },
     ],
     amount: { type: Number, requird: true },
-    address: { type: Object, requird: true },
-    status: { type: String, default: "pending" },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.Schema("Order", OrderSchema);
+module.exports = mongoose.Schema("Summary", SummarySchema);
