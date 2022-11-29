@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Cart = require("../models/Cart");
+const Product = require("../models/Product");
 
 // Create/ Add new Carts
 
@@ -54,9 +55,9 @@ router.put("/:id", async (req, res) => {
 
 //Delete Cart
 
-router.delete("/id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    await Cart.findByIdAndDelete(req.body.id);
+    await Cart.findByIdAndDelete(req.params.id);
     res.status(200).json("Cart has been deleted!");
   } catch (err) {
     res.status(500).json(err);
@@ -78,8 +79,41 @@ router.get("/find/:userId", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const carts = await Cart.find();
-    res.status(200).json(carts);
+    // const cartItems = await Cart.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "products",
+    //       localField: "_id",
+    //       foreignField: "productId",
+    //       as: "productDetails",
+    //     },
+    //   },
+    //   // { $unwind: "$productDetails" },
+    //   {
+    //     $project: {
+    //       _id: 1,
+    //       price: "$productDetails.price",
+    //       quantity: 1,
+    //       // "description": "$productDetails.description",
+    //       name: "$productDetails.title",
+    //     },
+    //   },
+    // ]);
+
+    const cartItems = await Cart.find().sort({ createdAt: -1 });
+
+    const cartItemsWithProduct = await Promise.all(
+      cartItems?.map(async (cart) => {
+        const product = await Product.findById(cart?.productId);
+
+        cart["product"] = product?.title;
+        console.log(cart);
+        console.log("xxxx");
+        return cart;
+      })
+    );
+    console.log(cartItemsWithProduct);
+    res.status(200).json(cartItemsWithProduct);
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
