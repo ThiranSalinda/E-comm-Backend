@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     let response = null;
     if (hasProduct) {
       // update qty
-      const newQty = hasProduct?.quantity + req?.body?.quantity;
+      const newQty = hasProduct?.quantity + req?.body?.quantity * 1;
       response = await Cart.updateOne(
         {
           productId: req.body.productId,
