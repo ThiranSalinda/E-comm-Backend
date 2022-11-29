@@ -4,11 +4,30 @@ const Cart = require("../models/Cart");
 // Create/ Add new Carts
 
 router.post("/", async (req, res) => {
-  const newCart = new Cart(req.body);
-
   try {
-    const savedCart = await newCart.save();
-    res.status(200).json(savedCart);
+    const hasProduct = await Cart.findOne({
+      productId: req.body.productId,
+    });
+
+    let response = null;
+    if (hasProduct) {
+      // update qty
+      const newQty = hasProduct?.quantity + req?.body?.quantity;
+      response = await Cart.updateOne(
+        {
+          productId: req.body.productId,
+        },
+        {
+          $set: { quantity: newQty },
+        }
+      );
+    } else {
+      // add new row
+      // const newCart = await Cart(req.body)
+      response = await Cart(req.body).save();
+    }
+
+    res.status(200).json(response);
     console.log("New item added");
   } catch (err) {
     res.status(500).json(err);
