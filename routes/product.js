@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Product = require("../models/Product");
+const fs = require("fs");
+// const jsonData = require("../data/products.json");
 
 //Create/ Add new Products
 
@@ -13,17 +15,6 @@ router.post("/", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
-  }
-});
-
-//Get Products
-
-router.get("/find/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req?.params?.id);
-    res.status(200).json(product);
-  } catch (err) {
-    res.status(500).json(err);
   }
 });
 
@@ -51,6 +42,44 @@ router.get("/", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
     console.log(err);
+  }
+});
+
+//Get Products from json file
+
+router.get("/add-json-products", async (req, res) => {
+  try {
+    let jProducts = JSON.parse(fs.readFileSync(`${__dirname}\\products.json`));
+    // console.log(jsonData);
+
+    jProducts.forEach(async (element) => {
+      const hasProduct = await Product.findOne({
+        title: element.title,
+      });
+
+      if (!hasProduct) {
+        const newProduct = new Product(element);
+
+        await newProduct.save();
+        console.log("New item added");
+      }
+    });
+
+    res.status(200).json("New item added");
+  } catch (err) {
+    res.status(500).json(err);
+    console.log(err);
+  }
+});
+
+//Get Products
+
+router.get("/find/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req?.params?.id);
+    res.status(200).json(product);
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 
