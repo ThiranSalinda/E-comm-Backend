@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Google Pixel 7 Pro",
+    "price": 50000,
+    "dese": "Brand New"
+  },
+  {
+    "title": "Apple iPhone 13",
+    "price": 60000,
+    "dese": "Brand New"
+  },
+  {
+    "title": "Apple iPhone 13 Mini",
+    "price": 75000,
+    "dese": "Brand New"
+  },
+  {
+    "title": "Samsung Galaxy Z Fold 4",
+    "price": 38000,
+    "dese": "Brand New"
+  },
+  {
+    "title": "Samsung Galaxy S22 Ultra",
+    "price": 112000,
+    "dese": "Brand New"
+  }
+]
